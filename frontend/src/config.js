@@ -5,7 +5,7 @@
 const raw =
   import.meta.env.VITE_API_URL ||
   import.meta.env.VITE_API ||
-  (import.meta.env.DEV ? "http://localhost:4001" : "");
+  (import.meta.env.DEV ? "https://youtube-watch-party-application.onrender.com" : "");
 
 export const API_ORIGIN = raw.replace(/\/+$/, "").replace(/\/api(\/auth)?$/, "");
 
