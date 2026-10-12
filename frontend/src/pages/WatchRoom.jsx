@@ -351,13 +351,13 @@ function WatchRoom() {
                 typingUser={typingUser}
             />
 
-            <button className="d3-input"   style={{ backgroundColor:"lightgreen" , color: "black" , cursor:"pointer"}}
+            <button className="d3-input"   style={{ backgroundColor:"lightgreen" , color: "black" , cursor:"pointer" , marginLeft: 35}}
             onClick={() => copyText(roomCode, "Room code")}>
                 Copy Room Code
             </button>
 
             <button className="d3-input"
-                style={{ margin: 20 , backgroundColor:"lightblue", color:"black" , cursor:"pointer"}}
+                style={{ margin: 20 , backgroundColor:"lightblue", color:"black" , cursor:"pointer" , marginLeft:40}}
                 onClick={() => copyText(inviteLink, "Invite link")}
             >
                 Copy Invite Link

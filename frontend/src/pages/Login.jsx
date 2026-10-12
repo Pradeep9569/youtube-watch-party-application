@@ -1,5 +1,5 @@
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginRequest } from "../services/api/authApi";
 import { AuthContext } from "../components/context/AuthContext";
@@ -14,6 +14,14 @@ function Login() {
     });
 
     const [loading, setLoading] = useState(false);
+
+    // Clear previous values whenever Login page mounts
+    useEffect(() => {
+        setForm({
+            email: "",
+            password: "",
+        });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -43,6 +51,7 @@ function Login() {
 
             login(res.data.token, res.data.user);
 
+            // Clear the form after successful login
             setForm({
                 email: "",
                 password: "",
@@ -104,10 +113,16 @@ function Login() {
                     Login to your Watch Party account
                 </p>
 
-                <form onSubmit={handleSubmit}>
+                <form
+                    onSubmit={handleSubmit}
+                    autoComplete="off"
+                >
                     <label
                         htmlFor="email"
-                        style={{ fontWeight: "bold", color: "#444" }}
+                        style={{
+                            fontWeight: "bold",
+                            color: "#444",
+                        }}
                     >
                         Email
                     </label>
@@ -119,7 +134,7 @@ function Login() {
                         placeholder="Enter your email"
                         value={form.email}
                         onChange={handleChange}
-                        autoComplete="email"
+                        autoComplete="off"
                         required
                         style={{
                             width: "100%",
@@ -135,7 +150,10 @@ function Login() {
 
                     <label
                         htmlFor="password"
-                        style={{ fontWeight: "bold", color: "#444" }}
+                        style={{
+                            fontWeight: "bold",
+                            color: "#444",
+                        }}
                     >
                         Password
                     </label>
@@ -147,7 +165,7 @@ function Login() {
                         placeholder="Enter your password"
                         value={form.password}
                         onChange={handleChange}
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         required
                         style={{
                             width: "100%",

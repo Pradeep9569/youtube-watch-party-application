@@ -5,7 +5,7 @@
 const clientUrlRaw =
   process.env.CLIENT_URL || process.env.CLINT_URI || "";
 
-const DEFAULT_DEV_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"];
+const DEFAULT_DEV_ORIGINS = ["https://youtube-watch-party-application.vercel.app", "http://127.0.0.1:5173"];
 
 export function getAllowedOrigins() {
   const fromEnv = clientUrlRaw

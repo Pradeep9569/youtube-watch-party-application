@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 
@@ -7,33 +8,45 @@ import { corsOrigin } from "./config/cors.js";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: corsOrigin,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// CORS configuration
+const corsOptions = {
+  origin: corsOrigin,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
+// CORS middleware must run before API routes
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options(/.*/, cors(corsOptions));
+
+// Parse JSON request bodies
 app.use(express.json({ limit: "100kb" }));
 
-// Health checks (Render pings these)
+// Health check
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "YouTube Watch Party Backend is running",
   });
 });
-app.get("/health", (req, res) => res.status(200).json({ success: true }));
 
-// API routes. Final URLs:
-//   POST /api/auth/register   POST /api/auth/login   GET /api/auth/me
-//   POST /api/rooms/create    POST /api/rooms/join
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is healthy",
+  });
+});
+
+// Authentication routes
 app.use("/api/auth", authRoutes);
+
+// Room routes
 app.use("/api/rooms", roomRoutes);
 
-// 404 for anything else
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -41,14 +54,21 @@ app.use((req, res) => {
   });
 });
 
-// Central error handler (e.g. malformed JSON body -> 400 instead of an HTML stack trace)
-// eslint-disable-next-line no-unused-vars
+// Central error handler
 app.use((err, req, res, next) => {
   if (err?.type === "entity.parse.failed") {
-    return res.status(400).json({ success: false, message: "Invalid JSON body" });
+    return res.status(400).json({
+      success: false,
+      message: "Invalid JSON body",
+    });
   }
+
   console.error("Unhandled error:", err);
-  res.status(500).json({ success: false, message: "Server Error" });
+
+  return res.status(500).json({
+    success: false,
+    message: "Server Error",
+  });
 });
 
 export default app;
